@@ -2,6 +2,16 @@
 
 A Streamlit demo that runs the **same document** through 5 OCR / extraction pipelines side-by-side, so customers can see for themselves why **Azure Document Intelligence + GPT-5** is the winning combination.
 
+![PixelLedger sign-in](docs/screenshots/01-login.png)
+
+> ⚠️ **Disclaimer**
+>
+> This tool is an **initial starting point to help you decide — not a final recommendation.**
+> Real OCR/model selection depends on many additional factors (document variety, volume,
+> latency, cost ceilings, compliance, and ground-truth validation at scale). The results
+> shown here come **purely from a personal demo desk** and should be validated on your own
+> data before any production decision.
+
 ## Pipelines compared
 
 | # | Pipeline | What it does |
@@ -25,6 +35,32 @@ A Streamlit demo that runs the **same document** through 5 OCR / extraction pipe
 - Preprocessing: deskew, denoise, grayscale, page range
 - Optional ground-truth file (txt/md/json) unlocks accuracy metrics
 - Downloadable JSON bundle of all results
+
+## Screenshots
+
+**1. Secure sign-in** — username + passcode, or request access
+
+![Sign-in](docs/screenshots/01-login.png)
+
+**2. Configure the comparison** — pick a document preset and the model lineup in the sidebar
+
+![Configuration](docs/screenshots/02-configuration.png)
+
+**3. Upload & preview** — multi-page documents are prepared and previewed before analysis
+
+![Upload and preview](docs/screenshots/03-upload-preview.png)
+
+**4. Executive summary** — a business-decision aid that highlights the strongest pipeline for the run
+
+![Executive summary](docs/screenshots/04-executive-summary.png)
+
+**5. DocTalk** — chat with the extracted text; each pipeline answers from its own extraction, side-by-side, so you can compare accuracy
+
+![DocTalk](docs/screenshots/05-doctalk.png)
+
+> ⚠️ The Executive summary and any "recommended" pipeline are an **initial decision aid only**,
+> generated from a personal demo desk. They are **not** a final recommendation — validate on
+> your own data and consider volume, latency, cost, and compliance before deciding.
 
 ## Setup
 

@@ -503,6 +503,14 @@ def _render_executive_summary(
             unsafe_allow_html=True,
         )
 
+    st.caption(
+        "⚠️ Disclaimer: This is an initial starting point to help you decide — not a "
+        "final recommendation. Real model selection depends on many additional factors "
+        "(document variety, volume, latency, cost ceilings, compliance, and ground-truth "
+        "validation at scale). These results come purely from a personal demo desk and "
+        "should be validated on your own data before any production decision."
+    )
+
     if show_ai_summary and cfg is not None:
         payload = _narrative_payload(
             rows,
