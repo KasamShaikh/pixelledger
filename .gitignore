@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.env
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+
+# Runtime
+*.log
+uploads/
+
+# Local auth/request/login data (contains user passcode hashes & PII)
+data/*.json
+!data/*.example.json

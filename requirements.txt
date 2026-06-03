@@ -1,0 +1,15 @@
+streamlit>=1.36.0
+azure-ai-documentintelligence>=1.0.0
+openai>=1.51.0
+azure-identity>=1.17.0
+azure-storage-blob>=12.21.0
+aiohttp>=3.9.0
+python-dotenv>=1.0.1
+pymupdf>=1.24.0
+pillow>=10.3.0
+opencv-python-headless>=4.10.0
+numpy>=1.26.0
+jiwer>=3.0.4
+pandas>=2.2.0
+plotly>=5.22.0
+tenacity>=8.5.0

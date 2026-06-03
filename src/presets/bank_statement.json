@@ -1,0 +1,102 @@
+{
+    "name": "Account Statement → Transactions",
+    "description": "Generic account / card statement to structured transaction ledger. Heavy table stitching across pages.",
+    "extraction_prompt_file": "grounded_extraction.md",
+    "structuring_prompt_file": "grounded_structuring.md",
+    "json_schema": {
+        "type": "object",
+        "properties": {
+            "account_holder": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "account_number": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "statement_period": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "opening_balance": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "closing_balance": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "currency": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "transactions": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "date": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "description": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "reference": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "debit": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "credit": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "balance": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "defaults": {
+        "di_model": "prebuilt-layout",
+        "output_mode": "Strict JSON schema",
+        "stitch_tables": true,
+        "normalize_numbers": true,
+        "top_p": 1.0,
+        "seed": 42,
+        "temperature": 0.0,
+        "reasoning_effort": "medium",
+        "repeat_runs": 1
+    }
+}

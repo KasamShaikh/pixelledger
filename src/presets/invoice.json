@@ -1,0 +1,136 @@
+{
+    "name": "Invoice → Line Items",
+    "description": "Generic invoice / bill extraction with vendor, totals and line items.",
+    "extraction_prompt_file": "grounded_extraction.md",
+    "structuring_prompt_file": "grounded_structuring.md",
+    "json_schema": {
+        "type": "object",
+        "properties": {
+            "invoice_number": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "invoice_date": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "due_date": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "vendor": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "address": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "tax_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                }
+            },
+            "customer": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "address": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                }
+            },
+            "currency": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "line_items": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "description": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "quantity": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "unit_price": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "amount": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                }
+            },
+            "subtotal": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "tax": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "total": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            }
+        }
+    },
+    "defaults": {
+        "di_model": "prebuilt-invoice",
+        "output_mode": "Strict JSON schema",
+        "stitch_tables": true,
+        "normalize_numbers": true,
+        "top_p": 1.0,
+        "seed": 42,
+        "temperature": 0.0,
+        "reasoning_effort": "medium",
+        "repeat_runs": 1
+    }
+}

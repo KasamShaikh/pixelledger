@@ -1,0 +1,18 @@
+{
+    "name": "Free-form (no preset)",
+    "description": "No domain bundle. Choose your own prompt, schema and output mode.",
+    "extraction_prompt_file": "extraction.md",
+    "structuring_prompt_file": "structuring.md",
+    "json_schema": null,
+    "defaults": {
+        "di_model": "prebuilt-layout",
+        "output_mode": "Free-text / Markdown",
+        "stitch_tables": true,
+        "normalize_numbers": true,
+        "top_p": 1.0,
+        "seed": 42,
+        "temperature": 0.0,
+        "reasoning_effort": "medium",
+        "repeat_runs": 1
+    }
+}

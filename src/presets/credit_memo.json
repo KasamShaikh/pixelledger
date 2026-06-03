@@ -1,0 +1,228 @@
+{
+    "name": "Credit Memo → Structured Note",
+    "description": "Generic credit memo / sanction note structuring. Best-practice defaults: grounded prompt, table stitching, numeric normalisation, deterministic seed.",
+    "extraction_prompt_file": "grounded_extraction.md",
+    "structuring_prompt_file": "grounded_structuring.md",
+    "json_schema": {
+        "type": "object",
+        "properties": {
+            "client_overview": {
+                "type": "object",
+                "properties": {
+                    "client_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "constitution": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "credit_exposure_existing": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "credit_exposure_proposed": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "internal_rating_existing": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "internal_rating_proposed": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                }
+            },
+            "business_description": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "financials": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "period": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "revenue": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "ebitda": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "ebitda_pct": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "pat": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "net_worth": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "debt": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                }
+            },
+            "group_companies": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "rating": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "bankers": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "pat": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                }
+            },
+            "peers_competitors": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "revenue": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "ebitda": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "ebitda_pct": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                }
+            },
+            "banking_arrangement": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "bank": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "facility_type": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "category": {
+                            "type": [
+                                "string",
+                                "null"
+                            ],
+                            "description": "Existing | Proposed | Sanctioned"
+                        },
+                        "sanctioned": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "outstanding": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "undrawn": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "defaults": {
+        "di_model": "prebuilt-layout",
+        "output_mode": "Strict JSON schema",
+        "stitch_tables": true,
+        "normalize_numbers": true,
+        "top_p": 1.0,
+        "seed": 42,
+        "temperature": 0.0,
+        "reasoning_effort": "medium",
+        "repeat_runs": 1
+    }
+}
