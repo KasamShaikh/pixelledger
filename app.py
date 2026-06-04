@@ -296,15 +296,126 @@ def _request_passcode_dialog() -> None:
 
 
 def _render_login_page() -> None:
+    st.markdown(
+        """
+        <style>
+        /* ===== Login brand tone: ICICI orange + Axis burgundy ===== */
+        :root {
+          --brand-burgundy: #8C0A3E;
+          --brand-magenta: #B02A5B;
+          --brand-orange: #F37021;
+          --brand-gradient: linear-gradient(135deg, #8C0A3E 0%, #B02A5B 48%, #F37021 100%);
+        }
+        /* Soft branded backdrop for the login screen only */
+        body:has(.login-brand) [data-testid="stAppViewContainer"] {
+          background:
+            radial-gradient(1100px 540px at 12% -8%, rgba(140, 10, 62, 0.12), transparent 60%),
+            radial-gradient(1000px 520px at 92% 6%, rgba(243, 112, 33, 0.13), transparent 58%),
+            #fbf5f3 !important;
+        }
+        .login-brand .auth-hero-card {
+          position: relative;
+          background: var(--brand-gradient);
+          border: none;
+          border-radius: 22px;
+          padding: 1.6rem 1.5rem 1.7rem;
+          text-align: center;
+          color: #fff;
+          box-shadow: 0 18px 40px rgba(140, 10, 62, 0.28);
+          overflow: hidden;
+        }
+        .login-brand .auth-hero-card::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(420px 200px at 85% 0%, rgba(255,255,255,0.18), transparent 60%);
+          pointer-events: none;
+        }
+        .login-brand .auth-hero-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+          padding: 0.32rem 0.8rem;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.18);
+          color: #fff;
+          font-weight: 700;
+          font-size: 0.85rem;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          margin-bottom: 0.8rem;
+          backdrop-filter: blur(2px);
+        }
+        .login-brand .auth-hero-title {
+          font-size: 2rem;
+          line-height: 1.25;
+          font-weight: 800;
+          color: #fff;
+          margin: 0 0 0.5rem;
+          text-shadow: 0 2px 10px rgba(0,0,0,0.12);
+        }
+        .login-brand .auth-hero-subtitle {
+          color: rgba(255, 255, 255, 0.92);
+          font-size: 1rem;
+          margin: 0 auto;
+          max-width: 36rem;
+        }
+        /* Card holding the form */
+        body:has(.login-brand-anchor) [data-testid="stVerticalBlockBorderWrapper"] {
+          border: 1px solid #f0d8de !important;
+          border-radius: 18px !important;
+          background: linear-gradient(180deg, #ffffff 0%, #fff7f4 100%) !important;
+          box-shadow: 0 12px 28px rgba(140, 10, 62, 0.10) !important;
+        }
+        body:has(.login-brand-anchor) [data-testid="stVerticalBlockBorderWrapper"] h4 {
+          color: var(--brand-burgundy) !important;
+        }
+        /* Inputs pick up the burgundy focus ring */
+        body:has(.login-brand-anchor) [data-testid="stTextInput"] input:focus {
+          border-color: var(--brand-magenta) !important;
+          box-shadow: 0 0 0 2px rgba(176, 42, 91, 0.25) !important;
+        }
+        /* Primary "Sign in" -> burgundy→orange gradient */
+        body:has(.login-brand-anchor) .stButton button[kind="primary"] {
+          background: var(--brand-gradient) !important;
+          border: none !important;
+          box-shadow: 0 8px 18px rgba(140, 10, 62, 0.30) !important;
+        }
+        body:has(.login-brand-anchor) .stButton button[kind="primary"]:hover {
+          filter: brightness(1.05);
+          box-shadow: 0 10px 22px rgba(243, 112, 33, 0.34) !important;
+        }
+        /* Secondary "Request passcode" -> outlined burgundy */
+        body:has(.login-brand-anchor) .stButton button[kind="secondary"] {
+          background: #ffffff !important;
+          color: var(--brand-burgundy) !important;
+          border: 1.5px solid var(--brand-burgundy) !important;
+        }
+        body:has(.login-brand-anchor) .stButton button[kind="secondary"] p,
+        body:has(.login-brand-anchor) .stButton button[kind="secondary"] span {
+          color: var(--brand-burgundy) !important;
+        }
+        body:has(.login-brand-anchor) .stButton button[kind="secondary"]:hover {
+          background: #fbeef2 !important;
+          border-color: var(--brand-magenta) !important;
+        }
+        </style>
+        <div class='login-brand-anchor'></div>
+        """,
+        unsafe_allow_html=True,
+    )
+
     _, center_col, _ = st.columns([1, 1.6, 1])
 
     with center_col:
         st.markdown(
             """
-            <div class='auth-hero-card'>
-              <div class='auth-hero-badge'>📄 OCR Accuracy Workspace</div>
-              <div class='auth-hero-title'>📄 Smart OCR for Serious Documents</div>
-              <p class='auth-hero-subtitle'>Sign in to compare OCR pipelines, inspect confidence and accuracy, and continue your review.</p>
+            <div class='login-brand'>
+              <div class='auth-hero-card'>
+                <div class='auth-hero-badge'>📄 OCR Accuracy Workspace</div>
+                <div class='auth-hero-title'>Smart OCR for Serious Documents</div>
+                <p class='auth-hero-subtitle'>Sign in to compare OCR pipelines, inspect confidence and accuracy, and continue your review.</p>
+              </div>
             </div>
             """,
             unsafe_allow_html=True,
