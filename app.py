@@ -432,9 +432,9 @@ def _render_login_page() -> None:
         """
         <div class='login-brand'>
           <div class='auth-hero-card'>
-            <div class='auth-hero-badge'>📄 OCR Accuracy Workspace</div>
+            <div class='auth-hero-badge'>📄 PixelLedger Studio</div>
             <div class='auth-hero-title'>Smart OCR for Serious Documents</div>
-            <p class='auth-hero-subtitle'>Turn complex documents into trusted, review-ready insights — sign in to get started.</p>
+            <p class='auth-hero-subtitle'>From scanned page to verified data, in one trusted workspace.</p>
           </div>
         </div>
         """,
