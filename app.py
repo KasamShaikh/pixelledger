@@ -434,7 +434,7 @@ def _render_login_page() -> None:
           <div class='auth-hero-card'>
             <div class='auth-hero-badge'>📄 OCR Accuracy Workspace</div>
             <div class='auth-hero-title'>Smart OCR for Serious Documents</div>
-            <p class='auth-hero-subtitle'>Sign in to compare OCR pipelines, inspect confidence and accuracy, and continue your review.</p>
+            <p class='auth-hero-subtitle'>Turn complex documents into trusted, review-ready insights — sign in to get started.</p>
           </div>
         </div>
         """,
