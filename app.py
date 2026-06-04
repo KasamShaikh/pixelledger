@@ -399,65 +399,68 @@ def _render_login_page() -> None:
           background: #fbeef2 !important;
           border-color: var(--brand-magenta) !important;
         }
+        /* Center the whole login block to a fixed, symmetric width */
+        body:has(.login-brand-anchor) .block-container {
+          max-width: 560px !important;
+          margin-left: auto !important;
+          margin-right: auto !important;
+        }
         </style>
         <div class='login-brand-anchor'></div>
         """,
         unsafe_allow_html=True,
     )
 
-    _, center_col, _ = st.columns([1, 1.6, 1])
+    st.markdown(
+        """
+        <div class='login-brand'>
+          <div class='auth-hero-card'>
+            <div class='auth-hero-badge'>📄 OCR Accuracy Workspace</div>
+            <div class='auth-hero-title'>Smart OCR for Serious Documents</div>
+            <p class='auth-hero-subtitle'>Sign in to compare OCR pipelines, inspect confidence and accuracy, and continue your review.</p>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    with center_col:
-        st.markdown(
-            """
-            <div class='login-brand'>
-              <div class='auth-hero-card'>
-                <div class='auth-hero-badge'>📄 OCR Accuracy Workspace</div>
-                <div class='auth-hero-title'>Smart OCR for Serious Documents</div>
-                <p class='auth-hero-subtitle'>Sign in to compare OCR pipelines, inspect confidence and accuracy, and continue your review.</p>
-              </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    with st.container(border=True):
+        st.markdown("#### Welcome back")
+        st.caption("Use your username and passcode to enter the workspace.")
 
-        with st.container(border=True):
-            st.markdown("#### Welcome back")
-            st.caption("Use your username and passcode to enter the workspace.")
+        if st.session_state.pop("request_submitted", False):
+            st.success("Request submitted for admin review.")
 
-            if st.session_state.pop("request_submitted", False):
-                st.success("Request submitted for admin review.")
+        username = st.text_input("Username", key="login_username")
+        passcode = st.text_input("Passcode", type="password", key="login_passcode")
 
-            username = st.text_input("Username", key="login_username")
-            passcode = st.text_input("Passcode", type="password", key="login_passcode")
+        sign_in_col, request_col = st.columns(2, gap="small")
+        with sign_in_col:
+            sign_in_clicked = st.button(
+                "Sign in", type="primary", key="login_btn", use_container_width=True
+            )
+        with request_col:
+            request_clicked = st.button(
+                "Request passcode",
+                key="open_request_form_btn",
+                use_container_width=True,
+            )
 
-            sign_in_col, request_col = st.columns(2, gap="small")
-            with sign_in_col:
-                sign_in_clicked = st.button(
-                    "Sign in", type="primary", key="login_btn", use_container_width=True
+        if sign_in_clicked:
+            user = authenticate_user(username, passcode)
+            if user is not None:
+                st.session_state["authenticated"] = True
+                st.session_state["auth_username"] = str(user.get("username") or "")
+                st.session_state["auth_role"] = str(user.get("role") or "user")
+                log_login_attempt(
+                    username, True, role=st.session_state["auth_role"]
                 )
-            with request_col:
-                request_clicked = st.button(
-                    "Request passcode",
-                    key="open_request_form_btn",
-                    use_container_width=True,
-                )
+                st.rerun()
+            log_login_attempt(username, False, reason="invalid_credentials")
+            st.error("Invalid username or passcode.")
 
-            if sign_in_clicked:
-                user = authenticate_user(username, passcode)
-                if user is not None:
-                    st.session_state["authenticated"] = True
-                    st.session_state["auth_username"] = str(user.get("username") or "")
-                    st.session_state["auth_role"] = str(user.get("role") or "user")
-                    log_login_attempt(
-                        username, True, role=st.session_state["auth_role"]
-                    )
-                    st.rerun()
-                log_login_attempt(username, False, reason="invalid_credentials")
-                st.error("Invalid username or passcode.")
-
-            if request_clicked:
-                _request_passcode_dialog()
+        if request_clicked:
+            _request_passcode_dialog()
 
 
 def _events_to_frame(events: list[dict[str, Any]]) -> pd.DataFrame:
