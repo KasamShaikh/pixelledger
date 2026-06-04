@@ -22,3 +22,8 @@ uploads/
 # Local auth/request/login data (contains user passcode hashes & PII)
 data/*.json
 !data/*.example.json
+
+# Run-history SQLite DB (contains extracted customer document text = PII)
+data/*.db
+data/*.db-wal
+data/*.db-shm

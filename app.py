@@ -44,6 +44,7 @@ from src.pipelines.doc_intelligence import DocIntelligencePipeline  # noqa: E402
 from src.pipelines.hybrid import HybridDIPipeline  # noqa: E402
 from src.pipelines.llm_vision import LLMVisionPipeline  # noqa: E402
 from src.preprocess import preprocess  # noqa: E402
+from src.storage import delete_run, list_runs, load_run, save_run  # noqa: E402
 from src.ui.results_view import render_results  # noqa: E402
 from src.ui.sidebar import render_sidebar  # noqa: E402
 
@@ -233,7 +234,7 @@ def _render_app_header() -> None:
 
 
 def _render_top_nav() -> str:
-    options = ["Compare", "Determinism", "Insights"]
+    options = ["Compare", "Determinism", "Insights", "History"]
     current = st.session_state.get("active_top_nav", "Compare")
     segmented_control = getattr(st, "segmented_control", None)
     if callable(segmented_control):
@@ -804,6 +805,26 @@ async def _run_judge(
     return out
 
 
+def _snapshot_options(opts: dict[str, Any]) -> dict[str, Any]:
+    """Return a JSON-safe copy of run options for the history record.
+
+    Drops uploaded file handles and any value that is not JSON-serializable.
+    """
+    safe: dict[str, Any] = {}
+    for key, value in opts.items():
+        if key == "gt_file":
+            continue
+        if isinstance(value, (str, int, float, bool, type(None))):
+            safe[key] = value
+        elif isinstance(value, (list, dict)):
+            try:
+                json.dumps(value)
+                safe[key] = value
+            except (TypeError, ValueError):
+                continue
+    return safe
+
+
 def _run_analysis(cfg, opts: dict[str, Any], uploaded) -> None:
     content = uploaded.read()
     mime = (
@@ -955,8 +976,92 @@ def _run_analysis(cfg, opts: dict[str, Any], uploaded) -> None:
     st.session_state["last_uploaded_name"] = uploaded.name
     st.session_state["doctalk_history"] = []
 
+    try:
+        save_run(
+            {
+                "run_id": run_id,
+                "username": current_user,
+                "filename": uploaded.name,
+                "mime_type": mime,
+                "pages": len(pages),
+                "repeat_runs": repeat_n,
+                "pipeline_count": len(pipelines),
+                "redacted": False,
+                "gt_present": gt_text is not None,
+                "judge_present": judge_scores is not None,
+                "total_cost_usd": sum(
+                    float(getattr(r, "cost_usd", 0.0) or 0.0) for r in results
+                ),
+                "options": _snapshot_options(opts),
+            },
+            results,
+        )
+    except Exception as exc:  # noqa: BLE001
+        st.warning(f"Run history could not be saved: {exc}")
+
+
+def _open_run(run_id: str) -> None:
+    """Load a stored run into session state and switch to the Compare view."""
+    meta, results = load_run(run_id)
+    if not results:
+        st.warning("That run could not be loaded (it may have been deleted).")
+        return
+    st.session_state["last_results"] = results
+    st.session_state["last_gt_text"] = None
+    st.session_state["last_gt_json"] = None
+    st.session_state["last_judge_scores"] = None
+    st.session_state["last_uploaded_name"] = (
+        f"{meta.get('filename', 'run')} (from history)"
+    )
+    st.session_state["doctalk_history"] = []
+    st.session_state["active_top_nav"] = "Compare"
+    st.rerun()
+
+
+def _render_history(cfg) -> None:
+    current_user = st.session_state.get("auth_username", "")
+    runs = list_runs(username=current_user, limit=100)
+    if not runs:
+        st.info("No saved runs yet. Run an analysis to build your history.")
+        return
+
+    st.caption(f"Showing your {len(runs)} most recent run(s).")
+    table = [
+        {
+            "Date (UTC)": (r.get("created_utc") or "")[:19].replace("T", " "),
+            "File": r.get("filename", ""),
+            "Pipelines": r.get("pipeline_count"),
+            "Repeat": r.get("repeat_runs"),
+            "Cost (USD)": round(float(r.get("total_cost_usd") or 0.0), 4),
+            "Redacted": "Yes" if r.get("redacted") else "No",
+            "GT": "Yes" if r.get("gt_present") else "No",
+            "Judge": "Yes" if r.get("judge_present") else "No",
+        }
+        for r in runs
+    ]
+    st.dataframe(pd.DataFrame(table), use_container_width=True, hide_index=True)
+
+    for r in runs:
+        run_id = r["run_id"]
+        label = (
+            f"{(r.get('created_utc') or '')[:19].replace('T', ' ')} "
+            f"\u2014 {r.get('filename', '')}"
+        )
+        with st.container(border=True):
+            cols = st.columns([6, 1, 1])
+            cols[0].markdown(f"**{label}**")
+            if cols[1].button("Open", key=f"open_{run_id}"):
+                _open_run(run_id)
+            if cols[2].button("Delete", key=f"del_{run_id}"):
+                delete_run(run_id)
+                st.rerun()
+
 
 def _render_workspace(cfg, opts: dict[str, Any], active_top_nav: str) -> None:
+    if active_top_nav == "History":
+        _render_history(cfg)
+        return
+
     uploaded = st.file_uploader(
         "Upload a document",
         type=["pdf", "png", "jpg", "jpeg", "tif", "tiff"],
@@ -1016,7 +1121,7 @@ else:
 st.markdown(
     """
 <div class="app-footer">
-  Built with stubborn optimism by <strong>Kasam Shaikh</strong> to turn OCR chaos into calm decisions. If this tool saves even one late-night debug session, the mission is already a win. For queries, help, or ideas, <a href="mailto:Kasm.Shaikh@microsoft.com?subject=OCR%20Demo%20Support%20Request">Connect Kasam Shaikh</a>.
+  <strong>Smart OCR for Serious Documents</strong> — Demo MVP. Decisions are advisory and require human review. · <a href="mailto:Kasm.Shaikh@microsoft.com?subject=OCR%20Demo%20Support%20Request">Connect Kasam Shaikh</a>
 </div>
 """,
     unsafe_allow_html=True,

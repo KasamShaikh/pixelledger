@@ -1,10 +1,10 @@
 {
-  "users": [
-    {
-      "username": "admin",
-      "passcode_hash": "pbkdf2_sha256$bootstrap$replace-on-first-run",
-      "role": "admin",
-      "created_at": "2026-01-01T00:00:00+00:00"
-    }
-  ]
+    "users": [
+        {
+            "username": "admin",
+            "passcode_hash": "pbkdf2_sha256$bootstrap$replace-on-first-run",
+            "role": "admin",
+            "created_at": "2026-01-01T00:00:00+00:00"
+        }
+    ]
 }
