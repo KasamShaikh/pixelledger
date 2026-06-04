@@ -99,8 +99,15 @@ st.markdown(
       background: rgba(255,255,255,0.9);
       color: var(--ink);
       font-size: 0.9rem;
+      text-align: center;
       z-index: 1000;
     }
+    /* Offset the footer past the sidebar so its left text is never clipped. */
+    section[data-testid="stSidebar"][aria-expanded="true"] {
+      z-index: 1001;
+    }
+    [data-testid="stAppViewContainer"] > .main .app-footer,
+    .app-footer { left: max(14px, 22rem); }
     .app-footer a {
       color: var(--primary);
       font-weight: 700;
