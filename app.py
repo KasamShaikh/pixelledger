@@ -399,11 +399,28 @@ def _render_login_page() -> None:
           background: #fbeef2 !important;
           border-color: var(--brand-magenta) !important;
         }
-        /* Center the whole login block to a fixed, symmetric width */
+        /* Neutralize the old blue top header bar on the login screen */
+        body:has(.login-brand-anchor) [data-testid="stHeader"] {
+          background: transparent !important;
+          box-shadow: none !important;
+        }
+        /* Center the whole login block to a comfortable, symmetric width */
+        body:has(.login-brand-anchor) [data-testid="stMain"] {
+          display: flex !important;
+          justify-content: center !important;
+        }
         body:has(.login-brand-anchor) .block-container {
-          max-width: 560px !important;
+          max-width: 680px !important;
+          padding-left: 1.25rem !important;
+          padding-right: 1.25rem !important;
           margin-left: auto !important;
           margin-right: auto !important;
+        }
+        /* Login has no sidebar -> let the footer span full width and center */
+        body:has(.login-brand-anchor) .app-footer {
+          left: 14px !important;
+          right: 14px !important;
+          text-align: center !important;
         }
         </style>
         <div class='login-brand-anchor'></div>
