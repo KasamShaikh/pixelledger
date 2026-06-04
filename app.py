@@ -400,9 +400,14 @@ def _render_login_page() -> None:
           border-color: var(--brand-magenta) !important;
         }
         /* Neutralize the old blue top header bar on the login screen */
+        body:has(.login-brand-anchor),
+        body:has(.login-brand-anchor) .stApp {
+          background: #fbf5f3 !important;
+        }
         body:has(.login-brand-anchor) [data-testid="stHeader"] {
-          background: transparent !important;
+          background: #fbf5f3 !important;
           box-shadow: none !important;
+          border-bottom: none !important;
         }
         /* Center the whole login block to a comfortable, symmetric width */
         body:has(.login-brand-anchor) [data-testid="stMain"] {
