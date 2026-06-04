@@ -90,24 +90,25 @@ st.markdown(
     }
     .app-footer {
       position: fixed;
-      left: 14px;
+      left: 22rem;
       right: 14px;
       bottom: 10px;
-      padding: 12px 16px;
+      padding: 10px 16px;
       border: 1px solid var(--border);
       border-radius: 14px;
-      background: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.92);
       color: var(--ink);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      line-height: 1.35;
       text-align: center;
+      white-space: normal;
+      overflow-wrap: anywhere;
       z-index: 1000;
     }
-    /* Offset the footer past the sidebar so its left text is never clipped. */
-    section[data-testid="stSidebar"][aria-expanded="true"] {
-      z-index: 1001;
+    /* When the sidebar is collapsed, reclaim the full width. */
+    body:has(section[data-testid="stSidebar"][aria-expanded="false"]) .app-footer {
+      left: 14px;
     }
-    [data-testid="stAppViewContainer"] > .main .app-footer,
-    .app-footer { left: max(14px, 22rem); }
     .app-footer a {
       color: var(--primary);
       font-weight: 700;
