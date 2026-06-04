@@ -709,10 +709,18 @@ def _render_doctalk(
         return
 
     all_labels = [s.label for s in sources]
+    # The multiselect persists its value via session_state["doctalk_selected"],
+    # which means the `default` is ignored on reruns. When a new/changed set of
+    # pipelines becomes available (e.g. a fresh extraction with more models),
+    # reset the selection to include them all; otherwise respect the user's
+    # manual selection.
+    known = st.session_state.get("doctalk_known_labels")
+    if known is None or set(known) != set(all_labels):
+        st.session_state["doctalk_known_labels"] = all_labels
+        st.session_state["doctalk_selected"] = all_labels
     selected_labels = st.multiselect(
         "Pipelines to ask",
         options=all_labels,
-        default=all_labels,
         key="doctalk_selected",
         help="Each selected pipeline answers the same question from its own extraction.",
     )
